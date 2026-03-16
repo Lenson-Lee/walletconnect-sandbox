@@ -1,7 +1,7 @@
 # WalletConnect Sandbox Dapp
 
 WalletConnect(Reown AppKit) 연동을 테스트하기 위한 React dApp입니다.  
-지갑 연결, 네트워크 전환, Personal Sign, 서명된 네트워크 표시 등을 포함합니다.
+지갑 연결, 네트워크 전환, Personal Sign, Send Transaction, eth_sendRawTransaction 등을 포함합니다.
 
 ---
 
@@ -90,6 +90,26 @@ src/
 - **서명 시점의 체인**  
   `useChainId()`는 **현재 연결된 체인**을 반환합니다. 사용자가 네트워크 전환 직후 서명하면, 그 체인 기준으로 “서명된 네트워크”가 표시됩니다.
 
+- **`handleSendRawTransaction` — eth_sendRawTransaction 흐름**  
+  일반적인 `eth_sendTransaction`과 달리, 서명과 전송을 2단계로 분리합니다.
+
+  1. **`walletClient.signTransaction()`** → 지갑에 `eth_signTransaction` 요청.  
+     지갑이 승인하면 서명된 raw 트랜잭션 hex(`0x...`)가 반환됩니다.
+  2. **`publicClient.sendRawTransaction()`** → 서명된 데이터를 RPC 노드에 `eth_sendRawTransaction`으로 브로드캐스트.  
+     성공하면 트랜잭션 해시가 반환됩니다.
+
+  > **주의**: MetaMask 등 일부 지갑은 보안상 `eth_signTransaction`을 지원하지 않습니다.  
+  > 이 경우 "Method not supported" 에러가 발생하며 콘솔에서 확인할 수 있습니다.
+
+  **eth_sendTransaction vs eth_sendRawTransaction 비교**
+
+  | 항목      | eth_sendTransaction               | eth_sendRawTransaction                                 |
+  | --------- | --------------------------------- | ------------------------------------------------------ |
+  | RPC 호출  | 1회 (서명+전송 지갑이 일괄 처리)  | 2회 (`eth_signTransaction` → `eth_sendRawTransaction`) |
+  | 서명 주체 | 지갑이 내부적으로 서명 후 전송    | dApp이 서명된 데이터를 받아 직접 전송                  |
+  | 사용 사례 | 일반적인 토큰 전송, 컨트랙트 호출 | 릴레이 전송, 서명 후 전송 타이밍 제어, 오프라인 서명   |
+  | 지갑 지원 | 거의 모든 지갑                    | 일부 지갑만 지원                                       |
+
 ### 4. 환경 변수
 
 - `VITE_` 접두사가 붙은 변수만 클라이언트에 노출됩니다.
@@ -124,7 +144,12 @@ EIP-712 서명. **검증**: 지갑이 타입드 데이터를 파싱해 사용자
 
 **검증**: 네이티브 토큰 전송 시 지갑에 가스비·금액이 정확히 표시되고, 승인 후 실제 체인에 트랜잭션이 기록·TX Hash가 반환되는지.
 
-### 5. 세션 관리 및 연결 해제 (Disconnect & Session Restore)
+### 5. Raw 트랜잭션 전송 (eth_sendRawTransaction)
+
+서명과 전송을 분리하여 지갑이 `eth_signTransaction`을 지원하는지, 서명된 raw 데이터를 `eth_sendRawTransaction`으로 브로드캐스트할 수 있는지 확인.  
+**검증**: 버튼 클릭 시 지갑에 서명 요청이 뜨고, 승인 후 트랜잭션 해시가 UI에 표시되는지. 지원하지 않는 지갑에서는 에러가 콘솔에 출력되는지.
+
+### 6. 세션 관리 및 연결 해제 (Disconnect & Session Restore)
 
 **검증**: dApp에서 로그아웃 시 지갑 세션도 종료되는지, 새로고침 후 재접속 시 기존 연결이 복구되는지.
 

@@ -5,16 +5,13 @@ import { defineChain, mainnet, arbitrum } from "@reown/appkit/networks";
 import { QueryClient } from "@tanstack/react-query";
 
 // Project ID from https://dashboard.reown.com (fallback is public ID for localhost only)
-const projectId =
-  import.meta.env.VITE_PROJECT_ID ?? "b56e18d47c72ab683b10814fe9495694";
+const projectId = import.meta.env.VITE_PROJECT_ID ?? "";
+const publicUrl = import.meta.env.VITE_PUBLIC_URL ?? "http://localhost:5173";
 
 const metadata = {
   name: "WalletConnect Sandbox Dapp",
   description: "Reown AppKit test dApp",
-  url:
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "http://localhost:5173",
+  url: typeof window !== "undefined" ? window.location.origin : publicUrl,
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
@@ -56,6 +53,7 @@ createAppKit({
   features: {
     analytics: true,
   },
+  allowUnsupportedChain: true,
 
   //** 추가옵션 참고용 */
   // 요청 권한(메서드·체인·이벤트)을 직접 정할 때

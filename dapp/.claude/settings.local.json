@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const { defineChain } = require\\('@reown/appkit/networks'\\); console.log\\(typeof defineChain\\)\" 2>&1 || npx tsx -e \"import { defineChain } from '@reown/appkit/networks'; console.log\\(typeof defineChain\\)\" 2>&1)",
+      "Bash(npx tsc --noEmit 2>&1 | head -20)",
+      "Bash(ipconfig getifaddr en0)",
+      "Bash(npm run dev -- --host)",
+      "Bash(kill 2749)",
+      "Bash(npx vite --host 0.0.0.0)",
+      "Bash(sleep 3 && lsof -i :5173 2>/dev/null)",
+      "Bash(ls -la /Users/lilly/Desktop/dev/walletconnect/walletconnect-sandbox/dapp/.env* 2>/dev/null)",
+      "Bash(curl -s \"https://verify.walletconnect.com/v2/project/b56e18d47c72ab683b10814fe9495694\" 2>/dev/null | python3 -m json.tool 2>/dev/null || curl -s \"https://verify.walletconnect.com/v2/project/b56e18d47c72ab683b10814fe9495694\")",
+      "Bash(curl -s \"https://explorer-api.walletconnect.com/v3/dapps?projectId=b56e18d47c72ab683b10814fe9495694&entries=1\" 2>/dev/null | python3 -m json.tool 2>/dev/null || echo \"---\" && curl -s -o /dev/null -w \"%{http_code}\" \"https://pulse.walletconnect.org/batch\" -H \"Origin: http://10.240.170.92:5173\" -H \"x-project-id: b56e18d47c72ab683b10814fe9495694\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://relay.walletconnect.com\" -H \"Origin: http://10.240.170.92:5173\" && echo \"\" && curl -s \"https://relay.walletconnect.org/?projectId=b56e18d47c72ab683b10814fe9495694\" -o /dev/null -w \"\\\\nHTTP: %{http_code}\\\\n\" 2>&1)",
+      "Bash(curl -s \"https://rpc.walletconnect.org/v1?chainId=eip155:1&projectId=b56e18d47c72ab683b10814fe9495694\" -H \"Origin: http://10.240.170.92:5173\" -H \"Referer: http://10.240.170.92:5173/\" -d '{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}' -w \"\\\\nHTTP: %{http_code}\" 2>&1)",
+      "Bash(curl -s \"https://rpc.walletconnect.org/v1?chainId=eip155:1&projectId=b56e18d47c72ab683b10814fe9495694\" -H \"Origin: http://localhost:5173\" -H \"Referer: http://localhost:5173/\" -d '{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}' -w \"\\\\nHTTP: %{http_code}\" 2>&1)",
+      "Bash(cat /Users/lilly/Desktop/dev/walletconnect/walletconnect-sandbox/dapp/node_modules/@reown/appkit/package.json | python3 -c \"import sys,json; print\\(json.load\\(sys.stdin\\)['version']\\)\")"
+    ]
+  }
+}
